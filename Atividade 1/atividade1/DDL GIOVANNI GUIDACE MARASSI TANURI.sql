@@ -1,6 +1,6 @@
 create schema biografia;
 
-create user 'user'@'localhost' identified by 'pass123';
+create user 'root'@'localhost' identified by 'root';
 
 grant select, insert, delete, update on biografia.* to user@'localhost';
 

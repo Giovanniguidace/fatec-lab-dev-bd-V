@@ -21,16 +21,13 @@ public class Habilidade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Id
     @Column(name="hab_nome")
     @NotNull
     private String nome;
 
-    @Id
     @Column(name="hab_descricao")
     private String descricao;
 
-    @Id
     @Column(name="hab_origem")
     private String origem;
 

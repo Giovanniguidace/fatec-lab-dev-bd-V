@@ -20,8 +20,8 @@ import javax.validation.constraints.NotNull;
 public class Personagem {
     
     @Id
-    @Column(name = "per_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "per_id")
     private Long id;
 
     @Column(name="per_nome")
