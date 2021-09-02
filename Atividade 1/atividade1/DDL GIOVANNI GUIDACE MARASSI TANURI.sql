@@ -1,6 +1,6 @@
 create schema biografia;
 
-create user 'root'@'localhost' identified by 'root';
+create user 'user'@'localhost' identified by 'pass123';
 
 grant select, insert, delete, update on biografia.* to user@'localhost';
 
@@ -24,7 +24,7 @@ create table hab_habilidade (
     unique key uni_habilidade_nome (hab_nome)
 );
 
-/* FALTA */
+
 create table pha_personagem_habilidade (
     per_id bigint unsigned not null,
     hab_id bigint unsigned not null,
@@ -65,7 +65,7 @@ create table aut_autorizacao (
     unique key uni_aut_nome (aut_nome)
 );
 
-/* FALTA */
+
 create table uau_usuario_autorizacao (
     usr_id bigint unsigned not null,
     aut_id bigint unsigned not null,

@@ -1,10 +1,16 @@
 package br.fatec.sp.gov.atividade1.entity;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -21,7 +27,7 @@ public class Personagem {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "per_id")
+    @Column(name="per_id")
     private Long id;
 
     @Column(name="per_nome")
@@ -30,11 +36,17 @@ public class Personagem {
 
     @Column(name="per_data_nascimento")
     @NotNull
-    private String dataNascimento;
+    private LocalDateTime dataNascimento;
 
     @Column(name="per_titulo")
     @NotNull
     private String titulo;
+
+    @ManyToMany
+    @JoinTable(name = "pha_personagem_habilidade",
+    joinColumns = { @JoinColumn(name = "per_id")},
+    inverseJoinColumns = { @JoinColumn(name = "hab_id")})
+    private Set<Habilidade> habilidades;
 
     public Long getId() {
         return id;
@@ -52,11 +64,11 @@ public class Personagem {
         this.nome = nome;
     }
 
-    public String getDataNascimento() {
+    public LocalDateTime getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(String dataNascimento) {
+    public void setDataNascimento(LocalDateTime dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 

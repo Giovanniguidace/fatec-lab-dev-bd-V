@@ -1,12 +1,15 @@
 package br.fatec.sp.gov.atividade1.entity;
 
-import javax.persistence.CascadeType;
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -22,14 +25,14 @@ public class Biografia {
 
     @Column(name="bio_data")
     @NotNull
-    private String data;
+    private LocalDateTime data;
 
     @Column(name = "bio_entrada")
     @NotNull
     private String entrada;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bio_per_fk", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "per_id")
     private Personagem personagem;
 
     public Long getId() {
@@ -40,11 +43,11 @@ public class Biografia {
         this.id = id;
     }
 
-    public String getData() {
+    public LocalDateTime getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(LocalDateTime data) {
         this.data = data;
     }
 
