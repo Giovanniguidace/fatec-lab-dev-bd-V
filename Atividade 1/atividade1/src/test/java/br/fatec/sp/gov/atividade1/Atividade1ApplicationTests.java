@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 
 import javax.transaction.Transactional;
 
@@ -12,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
+import br.fatec.sp.gov.atividade1.entity.Autorizacao;
 import br.fatec.sp.gov.atividade1.entity.Habilidade;
 import br.fatec.sp.gov.atividade1.entity.Personagem;
 import br.fatec.sp.gov.atividade1.entity.Usuario;
+import br.fatec.sp.gov.atividade1.repository.AutorizacaoRepository;
 import br.fatec.sp.gov.atividade1.repository.HabilidadeRepository;
 import br.fatec.sp.gov.atividade1.repository.PersonagemRepository;
 import br.fatec.sp.gov.atividade1.repository.UsuarioRepository;
@@ -32,6 +35,9 @@ class Atividade1ApplicationTests {
 
 	@Autowired
 	private HabilidadeRepository habilidadeRepo;
+
+	@Autowired
+	private AutorizacaoRepository autorizacaoRepo;
 
 
 	@Test
@@ -88,6 +94,42 @@ class Atividade1ApplicationTests {
 		assertFalse(usuarioRepo.findByNomeContainsOrEmailContains("ão", "email").isEmpty());
 	}
 
+	@Test
+	void  findByAutorizacoesNomeTest_usuario(){
+		Autorizacao autorizacao = new Autorizacao();
+		autorizacao.setNome("Teste");
+		autorizacaoRepo.save(autorizacao);
+
+		Usuario usuario = new Usuario();
+		usuario.setNome("João");
+		usuario.setSenha("123");
+		usuario.setEmail("joao@email.com");
+		usuario.setAutorizacoes(new HashSet<Autorizacao>());
+		usuario.getAutorizacoes().add(autorizacao);
+		usuarioRepo.save(usuario);
+
+		assertFalse(usuarioRepo.findByAutorizacoesNome("Teste").isEmpty());
+	}
+
+
+	/* TEST'S ENTITY AUTORIZACAO */  
+	
+	@Test
+	void  findByUsuariosNomeTest_autorizacao(){
+		Autorizacao autorizacao = new Autorizacao();
+		autorizacao.setNome("Teste");
+		autorizacaoRepo.save(autorizacao);
+
+		Usuario usuario = new Usuario();
+		usuario.setNome("João");
+		usuario.setSenha("123");
+		usuario.setEmail("joao@email.com");
+		usuario.setAutorizacoes(new HashSet<Autorizacao>());
+		usuario.getAutorizacoes().add(autorizacao);
+		usuarioRepo.save(usuario);
+
+		assertFalse(autorizacaoRepo.findByUsuariosNome("João").isEmpty());
+	}
 
 	
 
