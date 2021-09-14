@@ -12,5 +12,7 @@ public interface HabilidadeRepository extends JpaRepository<Habilidade, Long>{
     public Habilidade findByNome(String nome);
 
     public List<Habilidade> findByNomeContainsOrDescricaoContains(String nome, String descricao);
+
+    public List<Habilidade> findByPersonagensNome(String nome);
     
 }

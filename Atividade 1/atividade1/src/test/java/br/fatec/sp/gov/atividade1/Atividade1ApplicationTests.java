@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 
 import javax.transaction.Transactional;
@@ -14,10 +15,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import br.fatec.sp.gov.atividade1.entity.Autorizacao;
+import br.fatec.sp.gov.atividade1.entity.Biografia;
 import br.fatec.sp.gov.atividade1.entity.Habilidade;
 import br.fatec.sp.gov.atividade1.entity.Personagem;
 import br.fatec.sp.gov.atividade1.entity.Usuario;
 import br.fatec.sp.gov.atividade1.repository.AutorizacaoRepository;
+import br.fatec.sp.gov.atividade1.repository.BiografiaRepository;
 import br.fatec.sp.gov.atividade1.repository.HabilidadeRepository;
 import br.fatec.sp.gov.atividade1.repository.PersonagemRepository;
 import br.fatec.sp.gov.atividade1.repository.UsuarioRepository;
@@ -38,6 +41,9 @@ class Atividade1ApplicationTests {
 
 	@Autowired
 	private AutorizacaoRepository autorizacaoRepo;
+
+	@Autowired
+	private BiografiaRepository biografiaRepo;
 
 
 	@Test
@@ -68,6 +74,46 @@ class Atividade1ApplicationTests {
 
 		assertFalse(personagemRepo.findByNomeContainsOrTituloContains("em", "nha").isEmpty());
 	}
+
+	@Test
+	void  findByHabilidadeDescricaoTest_personagem(){
+		Habilidade habilidade = new Habilidade();
+		habilidade.setNome("Teste");
+		habilidade.setDescricao("Teste");
+		habilidade.setOrigem("Teste");
+		habilidadeRepo.save(habilidade);
+
+		Personagem personagem = new Personagem();
+		personagem.setNome("Teste");
+		personagem.setTitulo("Teste");
+		personagem.setDataNascimento(LocalDateTime.now());
+		personagem.setHabilidades(new HashSet<Habilidade>());
+		personagem.getHabilidades().add(habilidade);
+		personagemRepo.save(personagem);
+
+
+		assertFalse(personagemRepo.findByHabilidadesDescricao("Teste").isEmpty());
+	}
+
+	@Test
+	void findByBiografiasEntradaTest_personagem() {
+		Personagem personagem = new Personagem();
+		personagem.setNome("Homem Aranha");
+		personagem.setDataNascimento(LocalDateTime.now());
+		personagem.setTitulo("As aventuras do homem aranha");
+		personagemRepo.save(personagem);
+
+		Biografia biografia = new Biografia();
+		biografia.setEntrada("Teste");
+		biografia.setData(LocalDateTime.now());
+		biografia.setPersonagem(personagem);
+
+		biografiaRepo.save(biografia);
+
+		assertFalse(personagemRepo.findByBiografiasEntrada("Teste").isEmpty());
+	}
+
+	
 
 
 	/* TEST'S ENTITY USUARIO */ 
@@ -157,5 +203,47 @@ class Atividade1ApplicationTests {
 		assertFalse(habilidadeRepo.findByNomeContainsOrDescricaoContains("env", "3242344").isEmpty());
 	}
 
+	@Test
+	void  findByPersonagemNomeTest_habilidade(){
+		Habilidade habilidade = new Habilidade();
+		habilidade.setNome("Teste");
+		habilidade.setDescricao("Teste");
+		habilidade.setOrigem("Teste");
+		habilidadeRepo.save(habilidade);
+
+		
+
+		Personagem personagem = new Personagem();
+		personagem.setNome("Teste");
+		personagem.setTitulo("Teste");
+		personagem.setDataNascimento(LocalDateTime.now());
+		personagem.setHabilidades(new HashSet<Habilidade>());
+		personagem.getHabilidades().add(habilidade);
+		personagemRepo.save(personagem);
+
+
+		assertFalse(habilidadeRepo.findByPersonagensNome("Teste").isEmpty());
+	}
+
+
+	/* TEST'S ENTITY BIOGRAFIA */ 
+
+	@Test
+	void findByPersonagemNomeTest_biografia() {
+		Personagem personagem = new Personagem();
+		personagem.setNome("Homem Aranha");
+		personagem.setDataNascimento(LocalDateTime.now());
+		personagem.setTitulo("As aventuras do homem aranha");
+		personagemRepo.save(personagem);
+
+		Biografia biografia = new Biografia();
+		biografia.setEntrada("Teste");
+		biografia.setData(LocalDateTime.now());
+		biografia.setPersonagem(personagem);
+
+		biografiaRepo.save(biografia);
+
+		assertFalse(biografiaRepo.findByPersonagemNome("Homem Aranha").isEmpty());
+	}
 	
 }

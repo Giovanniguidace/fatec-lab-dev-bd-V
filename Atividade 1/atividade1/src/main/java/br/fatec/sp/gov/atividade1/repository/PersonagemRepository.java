@@ -12,5 +12,9 @@ public interface PersonagemRepository extends JpaRepository<Personagem, Long>{
 
     public List<Personagem> findByNomeContainsOrTituloContains(String nome, String Titulo);
 
+    public List<Personagem> findByBiografiasEntrada(String entrada);
+
+    public List<Personagem> findByHabilidadesDescricao(String descricao);
+
 
 }

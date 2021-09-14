@@ -31,7 +31,7 @@ public class Biografia {
     @NotNull
     private String entrada;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "per_id")
     private Personagem personagem;
 
