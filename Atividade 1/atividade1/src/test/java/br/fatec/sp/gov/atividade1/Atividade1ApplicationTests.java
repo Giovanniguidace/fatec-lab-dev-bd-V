@@ -24,6 +24,7 @@ import br.fatec.sp.gov.atividade1.repository.BiografiaRepository;
 import br.fatec.sp.gov.atividade1.repository.HabilidadeRepository;
 import br.fatec.sp.gov.atividade1.repository.PersonagemRepository;
 import br.fatec.sp.gov.atividade1.repository.UsuarioRepository;
+import br.fatec.sp.gov.atividade1.service.PersonagemService;
 
 @SpringBootTest
 @Transactional
@@ -44,6 +45,9 @@ class Atividade1ApplicationTests {
 
 	@Autowired
 	private BiografiaRepository biografiaRepo;
+
+	@Autowired
+	private PersonagemService personagemService;
 
 
 	@Test
@@ -244,6 +248,16 @@ class Atividade1ApplicationTests {
 		biografiaRepo.save(biografia);
 
 		assertFalse(biografiaRepo.findByPersonagemNome("Homem Aranha").isEmpty());
+	}
+
+
+	/* TEST'S SERVICE PERSONAGEM SERVICE */
+
+	@Test
+	void novoPersonagem_Test(){
+		personagemService.novoPersonagem("Teste", LocalDateTime.now(), "Teste", "Teste", "Teste", "Teste", "Teste");
+
+		assertNotNull(personagemRepo.findByNome("Teste"));
 	}
 	
 }
