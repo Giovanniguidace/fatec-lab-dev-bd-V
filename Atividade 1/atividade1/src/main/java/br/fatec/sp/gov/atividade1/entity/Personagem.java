@@ -17,6 +17,10 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import br.fatec.sp.gov.atividade1.controller.View;
+
 
 
 @Entity
@@ -30,24 +34,29 @@ public class Personagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="per_id")
+    @JsonView(View.PersonagemCompleto.class)
     private Long id;
 
     @Column(name="per_nome")
     @NotNull
+    @JsonView(View.PersonagemSimplificado.class)
     private String nome;
 
     @Column(name="per_data_nascimento")
     @NotNull
+    @JsonView(View.PersonagemSimplificado.class)
     private LocalDateTime dataNascimento;
 
     @Column(name="per_titulo")
     @NotNull
+    @JsonView(View.PersonagemCompleto.class)
     private String titulo;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "pha_personagem_habilidade",
         joinColumns = { @JoinColumn(name = "per_id")},
         inverseJoinColumns = { @JoinColumn(name = "hab_id")})
+    @JsonView(View.PersonagemSimplificado.class)    
     private Set<Habilidade> habilidades;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "personagem")

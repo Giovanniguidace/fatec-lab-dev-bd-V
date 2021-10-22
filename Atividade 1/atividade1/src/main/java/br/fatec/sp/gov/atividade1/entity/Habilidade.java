@@ -13,6 +13,11 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import br.fatec.sp.gov.atividade1.controller.View;
+
 
 @Entity
 @Table(name = "hab_habilidade",
@@ -23,18 +28,23 @@ public class Habilidade {
     @Id
     @Column(name="hab_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(View.PersonagemCompleto.class)
     private Long id;
 
     @Column(name="hab_nome")
     @NotNull
+    @JsonView(View.PersonagemSimplificado.class)
     private String nome;
 
     @Column(name="hab_descricao")
+    @JsonView(View.PersonagemSimplificado.class)
     private String descricao;
 
     @Column(name="hab_origem")
+    @JsonView(View.PersonagemCompleto.class)
     private String origem;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "habilidades", fetch = FetchType.LAZY)
     private Set<Personagem> personagens;
 
