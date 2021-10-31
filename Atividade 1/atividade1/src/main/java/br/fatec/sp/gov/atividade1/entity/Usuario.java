@@ -12,56 +12,49 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
+import br.fatec.sp.gov.atividade1.controller.ViewUsuario;
 
 @Entity
-@Table(name = "usr_usuario",
-        uniqueConstraints = 
-        @UniqueConstraint(columnNames = {"usr_nome", "usr_email"})        
-)
+@Table(name = "usr_usuario")
 public class Usuario {
-    
+
     @Id
-    @Column(name="usr_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long usr_id;
-    
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "usr_id")
+    @JsonView(ViewUsuario.UsuarioCompleto.class)
+    private Long id;
+
     @Column(name = "usr_nome")
-    @NotNull
+    @JsonView(ViewUsuario.UsuarioSimplificado.class)
     private String nome;
 
-    @Column(name="usr_email")
-    @NotNull
+    @Column(name = "usr_email")
+    @JsonView(ViewUsuario.UsuarioSimplificado.class)
     private String email;
-    
+
     @Column(name = "usr_senha")
-    @NotNull
+    @JsonView(ViewUsuario.UsuarioCompleto.class)
     private String senha;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "uau_usuario_autorizacao",
-        joinColumns = { @JoinColumn(name = "usr_id")},
-        inverseJoinColumns = { @JoinColumn(name = "aut_id")})
+        joinColumns = { @JoinColumn(name = "usr_id") },
+        inverseJoinColumns = { @JoinColumn(name = "aut_id") })
+    @JsonView(ViewUsuario.UsuarioSimplificado.class)
     private Set<Autorizacao> autorizacoes;
 
-    public Long getUsr_id() {
-        return usr_id;
-    }
-
-    public void setUsr_id(Long usr_id) {
-        this.usr_id = usr_id;
-    }
-
-    public Set<Autorizacao> getAutorizacoes() {
-        return autorizacoes;
-    }
-
-    public void setAutorizacoes(Set<Autorizacao> autorizacoes) {
-        this.autorizacoes = autorizacoes;
-    }
-
    
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;
@@ -87,6 +80,12 @@ public class Usuario {
         this.senha = senha;
     }
 
-    
+    public Set<Autorizacao> getAutorizacoes() {
+        return autorizacoes;
+    }
 
+    public void setAutorizacoes(Set<Autorizacao> autorizacoes) {
+        this.autorizacoes = autorizacoes;
+    }
+    
 }

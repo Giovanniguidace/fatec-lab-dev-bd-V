@@ -10,28 +10,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonView;
 
+import br.fatec.sp.gov.atividade1.controller.ViewUsuario;
 
 @Entity
-@Table(name = "aut_autorizacao",
-        uniqueConstraints = 
-        @UniqueConstraint(columnNames = {"aut_nome"})
-)
+@Table(name = "aut_autorizacao")
 public class Autorizacao {
-    
+
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "aut_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(ViewUsuario.UsuarioCompleto.class)
     private Long id;
 
-    @Column(name="aut_nome")
-    @NotNull
+    @Column(name = "aut_nome")
+    @JsonView(ViewUsuario.UsuarioSimplificado.class)
     private String nome;
 
-    @ManyToMany(mappedBy = "autorizacoes", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "autorizacoes")
     private Set<Usuario> usuarios;
 
     public Long getId() {
@@ -57,6 +55,5 @@ public class Autorizacao {
     public void setUsuarios(Set<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
-
     
 }
