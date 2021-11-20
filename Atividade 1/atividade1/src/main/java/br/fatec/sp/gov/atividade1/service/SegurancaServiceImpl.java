@@ -10,11 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import br.fatec.sp.gov.atividade1.entity.Autorizacao;
 import br.fatec.sp.gov.atividade1.entity.Usuario;
 import br.fatec.sp.gov.atividade1.repository.AutorizacaoRepository;
 import br.fatec.sp.gov.atividade1.repository.UsuarioRepository;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @Service
 public class SegurancaServiceImpl implements SegurancaService {
@@ -25,7 +27,11 @@ public class SegurancaServiceImpl implements SegurancaService {
     @Autowired
     AutorizacaoRepository autorizacaoRepo;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public Usuario novoUsuario(String nome, String email, String senha, String autorizacao) {
         
@@ -39,7 +45,7 @@ public class SegurancaServiceImpl implements SegurancaService {
         Usuario usuario = new Usuario();
         usuario.setNome(nome);
         usuario.setEmail(email);
-        usuario.setSenha(senha);
+        usuario.setSenha(passwordEncoder.encode(senha));
         usuario.setAutorizacoes(new HashSet<Autorizacao>());
         usuario.getAutorizacoes().add(aut);
         usuarioRepo.save(usuario);
@@ -48,6 +54,7 @@ public class SegurancaServiceImpl implements SegurancaService {
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
     public List<Usuario> buscarTodosUsuarios() {
         return usuarioRepo.findAll();
     }

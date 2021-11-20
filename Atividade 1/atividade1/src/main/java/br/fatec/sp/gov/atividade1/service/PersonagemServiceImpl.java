@@ -14,6 +14,8 @@ import br.fatec.sp.gov.atividade1.entity.Personagem;
 import br.fatec.sp.gov.atividade1.repository.HabilidadeRepository;
 import br.fatec.sp.gov.atividade1.repository.PersonagemRepository;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @Service
 public class PersonagemServiceImpl implements PersonagemService {
     
@@ -23,7 +25,8 @@ public class PersonagemServiceImpl implements PersonagemService {
     @Autowired
     HabilidadeRepository habilidadeRepo;
 
-
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public Personagem novoPersonagem(String nome, LocalDateTime dataNascimento, String titulo,
     String habilidade,String nomeHabilidade, String descricao, String origem){
@@ -50,6 +53,8 @@ public class PersonagemServiceImpl implements PersonagemService {
 
     }
 
+    @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
     public List<Personagem> buscarTodosPersonagens(){
         return personagemRepo.findAll();
     }
